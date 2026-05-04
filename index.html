@@ -27,6 +27,12 @@ h1 {
 p {
     font-size: 20px;
 }
+.selected-answer {
+    background: #facc15 !important;
+    color: #111827 !important;
+    border: 2px solid white !important;
+    transform: scale(1.03);
+}
 
 button {
     padding: 15px 30px;
@@ -204,6 +210,13 @@ function showQuestion() {
 
 function selectAnswer(answer) {
     selected = answer;
+
+    let buttons = document.querySelectorAll(".answer-btn");
+    buttons.forEach(function(btn) {
+        btn.classList.remove("selected-answer");
+    });
+
+    event.target.classList.add("selected-answer");
 }
 
 function next() {
