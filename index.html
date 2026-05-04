@@ -24,6 +24,24 @@ h1 {
 p {
     color: #cbd5f5;
     font-size: 18px;
+    #feedback {
+    margin: 20px auto;
+    padding: 15px;
+    width: 50%;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.correct {
+    background: #16a34a;
+    color: white;
+}
+
+.wrong {
+    background: #dc2626;
+    color: white;
+}
 }
 
 button {
@@ -94,7 +112,8 @@ button:hover {
 <div class="answers" id="answers"></div>
 
 <input type="text" id="textAnswer" class="hidden" placeholder="Type your answer">
-
+  
+<div id="feedback" class="hidden"></div>
 <br>
 <button onclick="next()">Next</button>
 
@@ -177,14 +196,48 @@ selected = ans;
 }
 
 function next(){
+function next(){
 let current = quiz[q];
+let correct = false;
+let feedback = document.getElementById("feedback");
 
 if(current.type === "fill" || current.type === "short"){
-let userInput = document.getElementById("textAnswer").value.toLowerCase();
-if(userInput === current.correct) score++;
-} else {
-if(selected === current.correct) score++;
+let userInput = document.getElementById("textAnswer").value.toLowerCase().trim();
+
+if(userInput === ""){
+alert("Answer first!");
+return;
 }
+
+if(userInput === current.correct){
+score++;
+correct = true;
+}
+} else {
+
+if(selected === ""){
+alert("Choose an answer!");
+return;
+}
+
+if(selected === current.correct){
+score++;
+correct = true;
+}
+}
+
+feedback.classList.remove("hidden", "correct", "wrong");
+
+if(correct){
+feedback.innerText = "Correct ✅";
+feedback.classList.add("correct");
+} else {
+feedback.innerText = "Wrong ❌";
+feedback.classList.add("wrong");
+}
+
+setTimeout(function(){
+feedback.classList.add("hidden");
 
 selected = "";
 document.getElementById("textAnswer").value = "";
@@ -196,8 +249,8 @@ show();
 } else {
 finish();
 }
+}, 1000);
 }
-
 function updateProgress(){
 let progress = ((q) / quiz.length) * 100;
 document.getElementById("progressBar").style.width = progress + "%";
