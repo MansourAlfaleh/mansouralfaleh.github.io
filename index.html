@@ -16,28 +16,20 @@ body {
 
 .container {
     max-width: 850px;
-    margin: 70px auto;
+    margin: 60px auto;
     padding: 30px;
 }
 
-h1 {
-    font-size: 42px;
-}
+h1 { font-size: 42px; }
 
-p {
-    font-size: 20px;
-}
+p { font-size: 20px; }
 
 .about {
     max-width: 650px;
-    margin: 30px auto;
+    margin: 25px auto;
     padding: 20px;
     background: rgba(255,255,255,0.08);
     border-radius: 18px;
-}
-
-.about h2 {
-    color: white;
 }
 
 .about p {
@@ -58,12 +50,18 @@ button {
     font-weight: bold;
 }
 
-button:hover {
-    transform: scale(1.05);
-}
+button:hover { transform: scale(1.05); }
 
-.hidden {
-    display: none;
+.hidden { display: none; }
+
+input {
+    padding: 15px;
+    width: 60%;
+    border-radius: 15px;
+    border: none;
+    font-size: 17px;
+    text-align: center;
+    margin: 10px;
 }
 
 .progress {
@@ -95,15 +93,6 @@ button:hover {
     border: 2px solid white !important;
 }
 
-input {
-    padding: 15px;
-    width: 60%;
-    border-radius: 15px;
-    border: none;
-    font-size: 17px;
-    text-align: center;
-}
-
 #feedback {
     margin: 20px auto;
     padding: 15px;
@@ -113,18 +102,22 @@ input {
     font-weight: bold;
 }
 
-.correct {
-    background: #16a34a;
-}
-
-.wrong {
-    background: #dc2626;
-}
+.correct { background: #16a34a; }
+.wrong { background: #dc2626; }
 
 .result-box {
     background: rgba(255,255,255,0.12);
     padding: 30px;
     border-radius: 25px;
+}
+
+.review-item {
+    text-align: left;
+    background: rgba(255,255,255,0.08);
+    margin: 15px auto;
+    padding: 15px;
+    border-radius: 15px;
+    max-width: 700px;
 }
 </style>
 </head>
@@ -144,6 +137,8 @@ input {
             </p>
         </div>
 
+        <input type="text" id="studentName" placeholder="Enter your name">
+        <br>
         <button onclick="startQuiz()">Start Quiz</button>
     </div>
 
@@ -172,6 +167,8 @@ input {
 let q = 0;
 let score = 0;
 let selected = "";
+let userName = "";
+let userAnswers = [];
 
 const quiz = [
     {
@@ -204,6 +201,13 @@ const quiz = [
 ];
 
 function startQuiz() {
+    userName = document.getElementById("studentName").value.trim();
+
+    if (userName === "") {
+        alert("Please enter your name first!");
+        return;
+    }
+
     document.getElementById("start").classList.add("hidden");
     document.getElementById("quiz").classList.remove("hidden");
     showQuestion();
@@ -248,16 +252,17 @@ function selectAnswer(button, answer) {
 function next() {
     let current = quiz[q];
     let correct = false;
+    let answerGiven = "";
 
     if (current.type === "fill" || current.type === "short") {
-        let userInput = document.getElementById("textAnswer").value.toLowerCase().trim();
+        answerGiven = document.getElementById("textAnswer").value.toLowerCase().trim();
 
-        if (userInput === "") {
+        if (answerGiven === "") {
             alert("Answer first!");
             return;
         }
 
-        if (userInput === current.correct.toLowerCase()) {
+        if (answerGiven === current.correct.toLowerCase()) {
             score++;
             correct = true;
         }
@@ -267,11 +272,20 @@ function next() {
             return;
         }
 
+        answerGiven = selected;
+
         if (selected === current.correct) {
             score++;
             correct = true;
         }
     }
+
+    userAnswers.push({
+        question: current.q,
+        yourAnswer: answerGiven,
+        correctAnswer: current.correct,
+        isCorrect: correct
+    });
 
     showFeedback(correct);
 
@@ -309,9 +323,25 @@ function finishQuiz() {
     document.getElementById("quiz").classList.add("hidden");
     document.getElementById("result").classList.remove("hidden");
 
+    let reviewHTML = "";
+
+    userAnswers.forEach(function(item, index) {
+        reviewHTML += `
+        <div class="review-item">
+            <h3>Question ${index + 1}</h3>
+            <p><strong>Question:</strong> ${item.question}</p>
+            <p><strong>Your answer:</strong> ${item.yourAnswer}</p>
+            <p><strong>Correct answer:</strong> ${item.correctAnswer}</p>
+            <p><strong>Result:</strong> ${item.isCorrect ? "Correct ✅" : "Wrong ❌"}</p>
+        </div>`;
+    });
+
     document.getElementById("result").innerHTML =
         `<h1>Quiz Completed 🎉</h1>
+         <h2>Well done, ${userName}!</h2>
          <p>Your Score: ${score} / ${quiz.length}</p>
+         <h2>Review Your Answers</h2>
+         ${reviewHTML}
          <button onclick="location.reload()">Try Again</button>`;
 }
 </script>
