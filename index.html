@@ -22,20 +22,12 @@ body {
 
 h1 { font-size: 42px; }
 
-p { font-size: 20px; }
-
 .about {
     max-width: 650px;
     margin: 25px auto;
     padding: 20px;
     background: rgba(255,255,255,0.08);
     border-radius: 18px;
-}
-
-.about p {
-    font-size: 15px;
-    color: #e5e7eb;
-    line-height: 1.6;
 }
 
 button {
@@ -46,23 +38,9 @@ button {
     cursor: pointer;
     background: linear-gradient(90deg, #6366f1, #a855f7);
     color: white;
-    font-size: 17px;
-    font-weight: bold;
 }
-
-button:hover { transform: scale(1.05); }
 
 .hidden { display: none; }
-
-input {
-    padding: 15px;
-    width: 60%;
-    border-radius: 15px;
-    border: none;
-    font-size: 17px;
-    text-align: center;
-    margin: 10px;
-}
 
 .progress {
     width: 80%;
@@ -89,35 +67,32 @@ input {
 
 .selected-answer {
     background: #facc15 !important;
-    color: #111827 !important;
-    border: 2px solid white !important;
+    color: black !important;
+}
+
+input {
+    padding: 12px;
+    width: 60%;
+    border-radius: 10px;
+    border: none;
 }
 
 #feedback {
-    margin: 20px auto;
-    padding: 15px;
+    margin: 15px auto;
+    padding: 10px;
     width: 60%;
-    border-radius: 15px;
-    font-size: 20px;
-    font-weight: bold;
+    border-radius: 10px;
 }
 
-.correct { background: #16a34a; }
-.wrong { background: #dc2626; }
-
-.result-box {
-    background: rgba(255,255,255,0.12);
-    padding: 30px;
-    border-radius: 25px;
-}
+.correct { background: green; }
+.wrong { background: red; }
 
 .review-item {
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
     text-align: left;
-    background: rgba(255,255,255,0.08);
-    margin: 15px auto;
-    padding: 15px;
-    border-radius: 15px;
-    max-width: 700px;
 }
 </style>
 </head>
@@ -126,44 +101,38 @@ input {
 
 <div class="container">
 
-    <div id="start">
-        <h1>Master English Grammar 🚀</h1>
-        <p>Test your knowledge with a smart quiz</p>
+<div id="start">
+    <h1>Grammar Quiz 🚀</h1>
+    <input type="text" id="studentName" placeholder="Enter your name">
+    <br>
+    <button onclick="startQuiz()">Start Quiz</button>
+</div>
 
-        <div class="about">
-            <h2>About Me</h2>
-            <p>
-                Hi, I'm Mansour 👋. This is my personal English quiz website where I test grammar skills in a simple and interactive way.
-            </p>
-        </div>
+<div id="quiz" class="hidden">
 
-        <input type="text" id="studentName" placeholder="Enter your name">
-        <br>
-        <button onclick="startQuiz()">Start Quiz</button>
+    <h2 id="welcomeName"></h2>
+
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <div id="quiz" class="hidden">
-        <div class="progress">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
+    <h3 id="qNumber"></h3>
+    <p id="question"></p>
 
-        <h2 id="qNumber"></h2>
-        <p id="question"></p>
+    <div id="answers"></div>
+    <input type="text" id="textAnswer" class="hidden">
 
-        <div id="answers"></div>
+    <div id="feedback" class="hidden"></div>
 
-        <input type="text" id="textAnswer" class="hidden" placeholder="Type your answer">
+    <button onclick="next()">Next</button>
+</div>
 
-        <div id="feedback" class="hidden"></div>
-
-        <button onclick="next()">Next</button>
-    </div>
-
-    <div id="result" class="hidden result-box"></div>
+<div id="result" class="hidden"></div>
 
 </div>
 
 <script>
+
 let q = 0;
 let score = 0;
 let selected = "";
@@ -171,65 +140,45 @@ let userName = "";
 let userAnswers = [];
 
 const quiz = [
-    {
-        type: "mcq",
-        q: "Each of the students ______ expected to submit their assignment by Friday.",
-        a: ["are", "is", "were"],
-        correct: "is"
-    },
-    {
-        type: "truefalse",
-        q: "True or False: A sentence must always start with a capital letter.",
-        a: ["True", "False"],
-        correct: "True"
-    },
-    {
-        type: "fill",
-        q: "Fill in the blank: I ___ a student.",
-        correct: "am"
-    },
-    {
-        type: "short",
-        q: "Short answer: What is the past tense of 'go'?",
-        correct: "went"
-    },
-    {
-        type: "short",
-        q: "Write the synonym of 'big'.",
-        correct: "large"
-    }
+    {type:"mcq", q:"Each of the students ___ expected.", a:["are","is","were"], correct:"is"},
+    {type:"truefalse", q:"English is easy", a:["True","False"], correct:"True"},
+    {type:"fill", q:"I ___ a student", correct:"am"},
+    {type:"short", q:"Past of go?", correct:"went"},
+    {type:"short", q:"Synonym of big?", correct:"large"}
 ];
 
-function startQuiz() {
+function startQuiz(){
     userName = document.getElementById("studentName").value.trim();
 
-    if (userName === "") {
-        alert("Please enter your name first!");
+    if(userName === ""){
+        alert("Enter your name");
         return;
     }
 
     document.getElementById("start").classList.add("hidden");
     document.getElementById("quiz").classList.remove("hidden");
+
+    document.getElementById("welcomeName").innerText = "Welcome " + userName + " 👋";
+
     showQuestion();
 }
 
-function showQuestion() {
+function showQuestion(){
     let current = quiz[q];
 
-    document.getElementById("qNumber").innerText = "Question " + (q + 1) + " / " + quiz.length;
+    document.getElementById("qNumber").innerText = "Question " + (q+1);
     document.getElementById("question").innerText = current.q;
 
     document.getElementById("answers").innerHTML = "";
     document.getElementById("textAnswer").classList.add("hidden");
     document.getElementById("textAnswer").value = "";
-    document.getElementById("feedback").classList.add("hidden");
 
     selected = "";
 
-    if (current.type === "mcq" || current.type === "truefalse") {
-        current.a.forEach(function(answer) {
+    if(current.type === "mcq" || current.type === "truefalse"){
+        current.a.forEach(ans=>{
             document.getElementById("answers").innerHTML +=
-                `<button class="answer-btn" onclick="selectAnswer(this, '${answer}')">${answer}</button>`;
+            `<button class="answer-btn" onclick="selectAnswer(this,'${ans}')">${ans}</button>`;
         });
     } else {
         document.getElementById("textAnswer").classList.remove("hidden");
@@ -238,112 +187,67 @@ function showQuestion() {
     updateProgress();
 }
 
-function selectAnswer(button, answer) {
-    selected = answer;
-
-    let buttons = document.querySelectorAll(".answer-btn");
-    buttons.forEach(function(btn) {
-        btn.classList.remove("selected-answer");
-    });
-
-    button.classList.add("selected-answer");
+function selectAnswer(btn, ans){
+    selected = ans;
+    document.querySelectorAll(".answer-btn").forEach(b=>b.classList.remove("selected-answer"));
+    btn.classList.add("selected-answer");
 }
 
-function next() {
+function next(){
     let current = quiz[q];
     let correct = false;
-    let answerGiven = "";
+    let answer = "";
 
-    if (current.type === "fill" || current.type === "short") {
-        answerGiven = document.getElementById("textAnswer").value.toLowerCase().trim();
-
-        if (answerGiven === "") {
-            alert("Answer first!");
-            return;
-        }
-
-        if (answerGiven === current.correct.toLowerCase()) {
-            score++;
-            correct = true;
-        }
+    if(current.type === "fill" || current.type === "short"){
+        answer = document.getElementById("textAnswer").value.toLowerCase();
+        if(answer === "") return alert("Answer first");
+        if(answer === current.correct) {score++; correct=true;}
     } else {
-        if (selected === "") {
-            alert("Choose an answer!");
-            return;
-        }
-
-        answerGiven = selected;
-
-        if (selected === current.correct) {
-            score++;
-            correct = true;
-        }
+        if(selected === "") return alert("Choose answer");
+        answer = selected;
+        if(selected === current.correct) {score++; correct=true;}
     }
 
-    userAnswers.push({
-        question: current.q,
-        yourAnswer: answerGiven,
-        correctAnswer: current.correct,
-        isCorrect: correct
-    });
+    userAnswers.push({q:current.q, your:answer, correct:current.correct, ok:correct});
 
-    showFeedback(correct);
+    q++;
 
-    setTimeout(function() {
-        q++;
-
-        if (q < quiz.length) {
-            showQuestion();
-        } else {
-            finishQuiz();
-        }
-    }, 900);
-}
-
-function showFeedback(correct) {
-    let feedback = document.getElementById("feedback");
-
-    feedback.classList.remove("hidden", "correct", "wrong");
-
-    if (correct) {
-        feedback.innerText = "Correct ✅";
-        feedback.classList.add("correct");
+    if(q < quiz.length){
+        showQuestion();
     } else {
-        feedback.innerText = "Wrong ❌";
-        feedback.classList.add("wrong");
+        finish();
     }
 }
 
-function updateProgress() {
-    let progress = ((q + 1) / quiz.length) * 100;
-    document.getElementById("progressBar").style.width = progress + "%";
+function updateProgress(){
+    document.getElementById("progressBar").style.width = ((q+1)/quiz.length*100)+"%";
 }
 
-function finishQuiz() {
+function finish(){
     document.getElementById("quiz").classList.add("hidden");
     document.getElementById("result").classList.remove("hidden");
 
-    let reviewHTML = "";
+    let review = "";
 
-    userAnswers.forEach(function(item, index) {
-        reviewHTML += `
+    userAnswers.forEach((item,i)=>{
+        review += `
         <div class="review-item">
-            <h3>Question ${index + 1}</h3>
-            <p><strong>Question:</strong> ${item.question}</p>
-            <p><strong>Your answer:</strong> ${item.yourAnswer}</p>
-            <p><strong>Correct answer:</strong> ${item.correctAnswer}</p>
-            <p><strong>Result:</strong> ${item.isCorrect ? "Correct ✅" : "Wrong ❌"}</p>
+        <b>Q${i+1}:</b> ${item.q}<br>
+        Your: ${item.your}<br>
+        Correct: ${item.correct}<br>
+        Result: ${item.ok ? "✔️" : "❌"}
         </div>`;
     });
 
     document.getElementById("result").innerHTML =
-        `<h1>Quiz Completed 🎉</h1>
-         <h2>Well done, ${userName}!</h2>
-         <p>Your Score: ${score} / ${quiz.length}</p>
-         <h2>Review Your Answers</h2>
-         ${reviewHTML}
-         <button onclick="location.reload()">Try Again</button>`;
+    `<h1>Done 🎉</h1>
+    <h2>${userName}</h2>
+    <p>Score: ${score}/5</p>
+    <h3>Review</h3>
+    ${review}
+    <button onclick="location.reload()">Try Again</button>`;
 }
+
 </script>
 
 </body>
