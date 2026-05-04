@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mansour Quiz</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    color: white;
+    text-align: center;
+}
+
+.container {
+    margin-top: 100px;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #cbd5f5;
+    font-size: 18px;
+}
+
+button {
+    margin-top: 30px;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    color: white;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Progress Bar */
+.progress {
+    width: 80%;
+    height: 10px;
+    background: #334155;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+
+.progress-bar {
+    height: 10px;
+    width: 0%;
+    background: #8b5cf6;
+    border-radius: 10px;
+}
+
+.answers button {
+    display: block;
+    margin: 10px auto;
+    width: 60%;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Master English Grammar 🚀</h1>
+<p>Test your knowledge with a smart quiz</p>
+
+<div id="start">
+<button onclick="startQuiz()">Start Quiz</button>
+</div>
+
+<div id="quiz" class="hidden">
+
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
+
+<h3 id="qNumber"></h3>
+<p id="question"></p>
+
+<div class="answers" id="answers"></div>
+
+<input type="text" id="textAnswer" class="hidden" placeholder="Type your answer">
+
+<br>
+<button onclick="next()">Next</button>
+
+</div>
+
+<h2 id="result" class="hidden"></h2>
+
+</div>
+
+<script>
+
+let q = 0;
+let score = 0;
+
+const quiz = [
+{
+type: "mcq",
+q: "Each of the students ______ expected to pass.",
+a: ["are","is","were"],
+correct: "is"
+},
+{
+type: "truefalse",
+q: "English is easy",
+a: ["True","False"],
+correct: "True"
+},
+{
+type: "fill",
+q: "I ___ a student",
+correct: "am"
+},
+{
+type: "short",
+q: "Past of go?",
+correct: "went"
+},
+{
+type: "mcq",
+q: "Choose synonym of big",
+a: ["small","large","tiny"],
+correct: "large"
+}
+];
+
+function startQuiz(){
+document.getElementById("start").classList.add("hidden");
+document.getElementById("quiz").classList.remove("hidden");
+show();
+}
+
+function show(){
+let current = quiz[q];
+
+document.getElementById("qNumber").innerText = `Question ${q+1} / 5`;
+document.getElementById("question").innerText = current.q;
+
+let answersDiv = document.getElementById("answers");
+let textInput = document.getElementById("textAnswer");
+
+answersDiv.innerHTML = "";
+textInput.classList.add("hidden");
+
+if(current.type === "mcq" || current.type === "truefalse"){
+current.a.forEach(ans=>{
+answersDiv.innerHTML += `<button onclick="select('${ans}')">${ans}</button>`;
+});
+}
+else {
+textInput.classList.remove("hidden");
+}
+
+updateProgress();
+}
+
+let selected = "";
+
+function select(ans){
+selected = ans;
+}
+
+function next(){
+let current = quiz[q];
+
+if(current.type === "fill" || current.type === "short"){
+let userInput = document.getElementById("textAnswer").value.toLowerCase();
+if(userInput === current.correct) score++;
+} else {
+if(selected === current.correct) score++;
+}
+
+selected = "";
+document.getElementById("textAnswer").value = "";
+
+q++;
+
+if(q < quiz.length){
+show();
+} else {
+finish();
+}
+}
+
+function updateProgress(){
+let progress = ((q) / quiz.length) * 100;
+document.getElementById("progressBar").style.width = progress + "%";
+}
+
+function finish(){
+document.getElementById("quiz").classList.add("hidden");
+document.getElementById("result").classList.remove("hidden");
+
+document.getElementById("result").innerText =
+`🔥 Your Score: ${score} / 5`;
+}
+
+</script>
+
+</body>
+</html>
