@@ -1,130 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mansour Quiz</title>
-
 <style>
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #0f172a, #1d4ed8);
-    color: white;
-    text-align: center;
+  font-family: Arial;
+  background: linear-gradient(135deg,#0f172a,#1d4ed8);
+  color: white;
+  text-align: center;
+  margin: 0;
 }
 
 .container {
-    max-width: 850px;
-    margin: 60px auto;
-    padding: 30px;
+  max-width: 850px;
+  margin: 70px auto;
+  padding: 30px;
 }
 
 h1 { font-size: 42px; }
 
 .about {
-    max-width: 650px;
-    margin: 25px auto;
-    padding: 20px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 18px;
+  max-width: 650px;
+  margin: 25px auto;
+  padding: 20px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
 }
 
 button {
-    padding: 15px 30px;
-    margin: 12px;
-    border-radius: 25px;
-    border: none;
-    cursor: pointer;
-    background: linear-gradient(90deg, #6366f1, #a855f7);
-    color: white;
+  padding: 15px 30px;
+  margin: 12px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(90deg,#6366f1,#a855f7);
+  color: white;
+  font-weight: bold;
+}
+
+input {
+  padding: 15px;
+  width: 60%;
+  border-radius: 12px;
+  border: none;
+  text-align: center;
+  font-size: 16px;
 }
 
 .hidden { display: none; }
 
-.progress {
-    width: 80%;
-    height: 12px;
-    background: #334155;
-    margin: 25px auto;
-    border-radius: 20px;
-}
-
-.progress-bar {
-    height: 12px;
-    width: 0%;
-    background: #ec4899;
-    border-radius: 20px;
-}
-
 .answer-btn {
-    display: block;
-    width: 70%;
-    margin: 12px auto;
-    background: #312e81;
-    border: 2px solid #a855f7;
+  display: block;
+  width: 70%;
+  margin: 12px auto;
+  background: #312e81;
+  color: white;
+  border: 2px solid #a855f7;
 }
 
-.selected-answer {
-    background: #facc15 !important;
-    color: black !important;
+.selected {
+  background: #facc15 !important;
+  color: black !important;
 }
 
-input {
-    padding: 12px;
-    width: 60%;
-    border-radius: 10px;
-    border: none;
-}
-
-#feedback {
-    margin: 15px auto;
-    padding: 10px;
-    width: 60%;
-    border-radius: 10px;
-}
-
-.correct { background: green; }
-.wrong { background: red; }
-
-.review-item {
-    background: rgba(255,255,255,0.1);
-    padding: 10px;
-    margin: 10px;
-    border-radius: 10px;
-    text-align: left;
+.review {
+  background: rgba(255,255,255,0.1);
+  padding: 12px;
+  margin: 12px auto;
+  border-radius: 12px;
+  max-width: 700px;
 }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
-<div id="start">
-    <h1>Grammar Quiz 🚀</h1>
-    <input type="text" id="studentName" placeholder="Enter your name">
-    <br>
-    <button onclick="startQuiz()">Start Quiz</button>
+<div id="home">
+  <h1>Master English Grammar 🚀</h1>
+  <p>Test your knowledge with a smart quiz</p>
+
+  <div class="about">
+    <h2>About Me</h2>
+    <p>
+      Hi, I'm Mansour 👋. This is my personal English quiz website where I test grammar skills in a simple and interactive way.
+    </p>
+  </div>
+
+  <button onclick="showName()">Start Quiz</button>
+</div>
+
+<div id="namePage" class="hidden">
+  <h1>Before We Start</h1>
+  <p>Please enter your name to begin the quiz.</p>
+  <input id="name" placeholder="Enter your name">
+  <br>
+  <button onclick="startQuiz()">Begin</button>
 </div>
 
 <div id="quiz" class="hidden">
+  <h2 id="welcome"></h2>
+  <h3 id="number"></h3>
+  <p id="question"></p>
 
-    <h2 id="welcomeName"></h2>
+  <div id="answers"></div>
+  <input id="textAnswer" class="hidden" placeholder="Type your answer">
 
-    <div class="progress">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
-
-    <h3 id="qNumber"></h3>
-    <p id="question"></p>
-
-    <div id="answers"></div>
-    <input type="text" id="textAnswer" class="hidden">
-
-    <div id="feedback" class="hidden"></div>
-
-    <button onclick="next()">Next</button>
+  <br>
+  <button onclick="next()">Next</button>
 </div>
 
 <div id="result" class="hidden"></div>
@@ -132,122 +115,115 @@ input {
 </div>
 
 <script>
-
-let q = 0;
+let i = 0;
 let score = 0;
 let selected = "";
 let userName = "";
-let userAnswers = [];
+let review = [];
 
 const quiz = [
-    {type:"mcq", q:"Each of the students ___ expected.", a:["are","is","were"], correct:"is"},
-    {type:"truefalse", q:"English is easy", a:["True","False"], correct:"True"},
-    {type:"fill", q:"I ___ a student", correct:"am"},
-    {type:"short", q:"Past of go?", correct:"went"},
-    {type:"short", q:"Synonym of big?", correct:"large"}
+  {type:"mcq", q:"Each of the students ___ expected to submit their assignment by Friday.", a:["are","is","were"], correct:"is"},
+  {type:"tf", q:"True or False: A sentence must always start with a capital letter.", a:["True","False"], correct:"True"},
+  {type:"fill", q:"Fill in the blank: I ___ a student.", correct:"am"},
+  {type:"short", q:"What is the past tense of 'go'?", correct:"went"},
+  {type:"short", q:"Write the synonym of 'big'.", correct:"large"}
 ];
 
+function showName(){
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("namePage").classList.remove("hidden");
+}
+
 function startQuiz(){
-    userName = document.getElementById("studentName").value.trim();
+  userName = document.getElementById("name").value.trim();
+  if(userName === "") return alert("Please enter your name");
 
-    if(userName === ""){
-        alert("Enter your name");
-        return;
-    }
+  document.getElementById("namePage").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  document.getElementById("welcome").innerText = "Welcome, " + userName + " 👋";
 
-    document.getElementById("start").classList.add("hidden");
-    document.getElementById("quiz").classList.remove("hidden");
-
-    document.getElementById("welcomeName").innerText = "Welcome " + userName + " 👋";
-
-    showQuestion();
+  showQuestion();
 }
 
 function showQuestion(){
-    let current = quiz[q];
+  let current = quiz[i];
 
-    document.getElementById("qNumber").innerText = "Question " + (q+1);
-    document.getElementById("question").innerText = current.q;
+  document.getElementById("number").innerText = "Question " + (i+1) + " / " + quiz.length;
+  document.getElementById("question").innerText = current.q;
+  document.getElementById("answers").innerHTML = "";
+  document.getElementById("textAnswer").classList.add("hidden");
+  document.getElementById("textAnswer").value = "";
+  selected = "";
 
-    document.getElementById("answers").innerHTML = "";
-    document.getElementById("textAnswer").classList.add("hidden");
-    document.getElementById("textAnswer").value = "";
-
-    selected = "";
-
-    if(current.type === "mcq" || current.type === "truefalse"){
-        current.a.forEach(ans=>{
-            document.getElementById("answers").innerHTML +=
-            `<button class="answer-btn" onclick="selectAnswer(this,'${ans}')">${ans}</button>`;
-        });
-    } else {
-        document.getElementById("textAnswer").classList.remove("hidden");
-    }
-
-    updateProgress();
+  if(current.type === "mcq" || current.type === "tf"){
+    current.a.forEach(ans => {
+      document.getElementById("answers").innerHTML +=
+      `<button class="answer-btn" onclick="pick(this,'${ans}')">${ans}</button>`;
+    });
+  } else {
+    document.getElementById("textAnswer").classList.remove("hidden");
+  }
 }
 
-function selectAnswer(btn, ans){
-    selected = ans;
-    document.querySelectorAll(".answer-btn").forEach(b=>b.classList.remove("selected-answer"));
-    btn.classList.add("selected-answer");
+function pick(btn, ans){
+  selected = ans;
+  document.querySelectorAll(".answer-btn").forEach(b => b.classList.remove("selected"));
+  btn.classList.add("selected");
 }
 
 function next(){
-    let current = quiz[q];
-    let correct = false;
-    let answer = "";
+  let current = quiz[i];
+  let answer = "";
 
-    if(current.type === "fill" || current.type === "short"){
-        answer = document.getElementById("textAnswer").value.toLowerCase();
-        if(answer === "") return alert("Answer first");
-        if(answer === current.correct) {score++; correct=true;}
-    } else {
-        if(selected === "") return alert("Choose answer");
-        answer = selected;
-        if(selected === current.correct) {score++; correct=true;}
-    }
+  if(current.type === "fill" || current.type === "short"){
+    answer = document.getElementById("textAnswer").value.toLowerCase().trim();
+    if(answer === "") return alert("Answer first");
+  } else {
+    if(selected === "") return alert("Choose an answer");
+    answer = selected;
+  }
 
-    userAnswers.push({q:current.q, your:answer, correct:current.correct, ok:correct});
+  let correct = answer.toLowerCase() === current.correct.toLowerCase();
+  if(correct) score++;
 
-    q++;
+  review.push({
+    question: current.q,
+    your: answer,
+    correct: current.correct,
+    result: correct
+  });
 
-    if(q < quiz.length){
-        showQuestion();
-    } else {
-        finish();
-    }
-}
+  i++;
 
-function updateProgress(){
-    document.getElementById("progressBar").style.width = ((q+1)/quiz.length*100)+"%";
+  if(i < quiz.length){
+    showQuestion();
+  } else {
+    finish();
+  }
 }
 
 function finish(){
-    document.getElementById("quiz").classList.add("hidden");
-    document.getElementById("result").classList.remove("hidden");
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
 
-    let review = "";
+  let html = `<h1>Quiz Completed 🎉</h1>
+              <h2>${userName}</h2>
+              <p>Your Score: ${score} / ${quiz.length}</p>
+              <h2>Review Your Answers</h2>`;
 
-    userAnswers.forEach((item,i)=>{
-        review += `
-        <div class="review-item">
-        <b>Q${i+1}:</b> ${item.q}<br>
-        Your: ${item.your}<br>
-        Correct: ${item.correct}<br>
-        Result: ${item.ok ? "✔️" : "❌"}
-        </div>`;
-    });
+  review.forEach((r, index) => {
+    html += `
+    <div class="review">
+      <b>Q${index+1}:</b> ${r.question}<br>
+      Your answer: ${r.your}<br>
+      Correct answer: ${r.correct}<br>
+      Result: ${r.result ? "Correct ✅" : "Wrong ❌"}
+    </div>`;
+  });
 
-    document.getElementById("result").innerHTML =
-    `<h1>Done 🎉</h1>
-    <h2>${userName}</h2>
-    <p>Score: ${score}/5</p>
-    <h3>Review</h3>
-    ${review}
-    <button onclick="location.reload()">Try Again</button>`;
+  html += `<button onclick="location.reload()">Try Again</button>`;
+  document.getElementById("result").innerHTML = html;
 }
-
 </script>
 
 </body>
