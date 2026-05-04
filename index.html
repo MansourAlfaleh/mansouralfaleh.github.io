@@ -1,59 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mansour Quiz</title>
 
 <style>
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1d4ed8);
     color: white;
     text-align: center;
 }
 
 .container {
-    margin-top: 100px;
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 30px;
 }
 
 h1 {
-    font-size: 40px;
-    margin-bottom: 10px;
+    font-size: 42px;
 }
 
 p {
-    color: #cbd5f5;
-    font-size: 18px;
-    #feedback {
-    margin: 20px auto;
-    padding: 15px;
-    width: 50%;
-    border-radius: 15px;
     font-size: 20px;
-    font-weight: bold;
-}
-
-.correct {
-    background: #16a34a;
-    color: white;
-}
-
-.wrong {
-    background: #dc2626;
-    color: white;
-}
 }
 
 button {
-    margin-top: 30px;
     padding: 15px 30px;
-    font-size: 16px;
+    margin: 12px;
     border-radius: 25px;
     border: none;
     cursor: pointer;
-    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    background: linear-gradient(90deg, #6366f1, #a855f7);
     color: white;
-    transition: 0.3s;
+    font-size: 17px;
+    font-weight: bold;
 }
 
 button:hover {
@@ -64,206 +48,233 @@ button:hover {
     display: none;
 }
 
-/* Progress Bar */
 .progress {
     width: 80%;
-    height: 10px;
+    height: 12px;
     background: #334155;
-    margin: 20px auto;
-    border-radius: 10px;
+    margin: 25px auto;
+    border-radius: 20px;
 }
 
 .progress-bar {
-    height: 10px;
+    height: 12px;
     width: 0%;
-    background: #8b5cf6;
-    border-radius: 10px;
+    background: #a855f7;
+    border-radius: 20px;
 }
 
-.answers button {
+.answer-btn {
     display: block;
-    margin: 10px auto;
+    width: 70%;
+    margin: 12px auto;
+    background: #312e81;
+    border: 2px solid #8b5cf6;
+}
+
+input {
+    padding: 15px;
     width: 60%;
+    border-radius: 15px;
+    border: none;
+    font-size: 17px;
+    text-align: center;
+}
+
+#feedback {
+    margin: 20px auto;
+    padding: 15px;
+    width: 60%;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.correct {
+    background: #16a34a;
+}
+
+.wrong {
+    background: #dc2626;
+}
+
+.result-box {
+    background: rgba(255,255,255,0.12);
+    padding: 30px;
+    border-radius: 25px;
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>Master English Grammar 🚀</h1>
-<p>Test your knowledge with a smart quiz</p>
+    <div id="start">
+        <h1>Master English Grammar 🚀</h1>
+        <p>Test your knowledge with a smart quiz</p>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
 
-<div id="start">
-<button onclick="startQuiz()">Start Quiz</button>
-</div>
+    <div id="quiz" class="hidden">
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
 
-<div id="quiz" class="hidden">
+        <h2 id="qNumber"></h2>
+        <p id="question"></p>
 
-<div class="progress">
-<div class="progress-bar" id="progressBar"></div>
-</div>
+        <div id="answers"></div>
 
-<h3 id="qNumber"></h3>
-<p id="question"></p>
+        <input type="text" id="textAnswer" class="hidden" placeholder="Type your answer">
 
-<div class="answers" id="answers"></div>
+        <div id="feedback" class="hidden"></div>
 
-<input type="text" id="textAnswer" class="hidden" placeholder="Type your answer">
-  
-<div id="feedback" class="hidden"></div>
-<br>
-<button onclick="next()">Next</button>
+        <button onclick="next()">Next</button>
+    </div>
 
-</div>
-
-<h2 id="result" class="hidden"></h2>
+    <div id="result" class="hidden result-box"></div>
 
 </div>
 
 <script>
-
 let q = 0;
 let score = 0;
-
-const quiz = [
-{
-type: "mcq",
-q: "Each of the students ______ expected to pass.",
-a: ["are","is","were"],
-correct: "is"
-},
-{
-type: "truefalse",
-q: "English is easy",
-a: ["True","False"],
-correct: "True"
-},
-{
-type: "fill",
-q: "I ___ a student",
-correct: "am"
-},
-{
-type: "short",
-q: "Past of go?",
-correct: "went"
-},
-{
-type: "mcq",
-q: "Choose synonym of big",
-a: ["small","large","tiny"],
-correct: "large"
-}
-];
-
-function startQuiz(){
-document.getElementById("start").classList.add("hidden");
-document.getElementById("quiz").classList.remove("hidden");
-show();
-}
-
-function show(){
-let current = quiz[q];
-
-document.getElementById("qNumber").innerText = `Question ${q+1} / 5`;
-document.getElementById("question").innerText = current.q;
-
-let answersDiv = document.getElementById("answers");
-let textInput = document.getElementById("textAnswer");
-
-answersDiv.innerHTML = "";
-textInput.classList.add("hidden");
-
-if(current.type === "mcq" || current.type === "truefalse"){
-current.a.forEach(ans=>{
-answersDiv.innerHTML += `<button onclick="select('${ans}')">${ans}</button>`;
-});
-}
-else {
-textInput.classList.remove("hidden");
-}
-
-updateProgress();
-}
-
 let selected = "";
 
-function select(ans){
-selected = ans;
+const quiz = [
+    {
+        type: "mcq",
+        q: "Each of the students ______ expected to submit their assignment by Friday.",
+        a: ["are", "is", "were"],
+        correct: "is"
+    },
+    {
+        type: "truefalse",
+        q: "True or False: A sentence must always start with a capital letter.",
+        a: ["True", "False"],
+        correct: "True"
+    },
+    {
+        type: "fill",
+        q: "Fill in the blank: I ___ a student.",
+        correct: "am"
+    },
+    {
+        type: "short",
+        q: "Short answer: What is the past tense of 'go'?",
+        correct: "went"
+    },
+    {
+        type: "mcq",
+        q: "Choose the synonym of 'big'.",
+        a: ["small", "large", "tiny"],
+        correct: "large"
+    }
+];
+
+function startQuiz() {
+    document.getElementById("start").classList.add("hidden");
+    document.getElementById("quiz").classList.remove("hidden");
+    showQuestion();
 }
 
-function next(){
-function next(){
-let current = quiz[q];
-let correct = false;
-let feedback = document.getElementById("feedback");
+function showQuestion() {
+    let current = quiz[q];
 
-if(current.type === "fill" || current.type === "short"){
-let userInput = document.getElementById("textAnswer").value.toLowerCase().trim();
+    document.getElementById("qNumber").innerText = "Question " + (q + 1) + " / " + quiz.length;
+    document.getElementById("question").innerText = current.q;
 
-if(userInput === ""){
-alert("Answer first!");
-return;
+    document.getElementById("answers").innerHTML = "";
+    document.getElementById("textAnswer").classList.add("hidden");
+    document.getElementById("feedback").classList.add("hidden");
+
+    selected = "";
+
+    if (current.type === "mcq" || current.type === "truefalse") {
+        current.a.forEach(function(answer) {
+            document.getElementById("answers").innerHTML +=
+                `<button class="answer-btn" onclick="selectAnswer('${answer}')">${answer}</button>`;
+        });
+    } else {
+        document.getElementById("textAnswer").classList.remove("hidden");
+    }
+
+    updateProgress();
 }
 
-if(userInput === current.correct){
-score++;
-correct = true;
-}
-} else {
-
-if(selected === ""){
-alert("Choose an answer!");
-return;
+function selectAnswer(answer) {
+    selected = answer;
 }
 
-if(selected === current.correct){
-score++;
-correct = true;
-}
-}
+function next() {
+    let current = quiz[q];
+    let correct = false;
 
-feedback.classList.remove("hidden", "correct", "wrong");
+    if (current.type === "fill" || current.type === "short") {
+        let userInput = document.getElementById("textAnswer").value.toLowerCase().trim();
 
-if(correct){
-feedback.innerText = "Correct ✅";
-feedback.classList.add("correct");
-} else {
-feedback.innerText = "Wrong ❌";
-feedback.classList.add("wrong");
-}
+        if (userInput === "") {
+            alert("Answer first!");
+            return;
+        }
 
-setTimeout(function(){
-feedback.classList.add("hidden");
+        if (userInput === current.correct.toLowerCase()) {
+            score++;
+            correct = true;
+        }
+    } else {
+        if (selected === "") {
+            alert("Choose an answer!");
+            return;
+        }
 
-selected = "";
-document.getElementById("textAnswer").value = "";
+        if (selected === current.correct) {
+            score++;
+            correct = true;
+        }
+    }
 
-q++;
+    showFeedback(correct);
 
-if(q < quiz.length){
-show();
-} else {
-finish();
-}
-}, 1000);
-}
-function updateProgress(){
-let progress = ((q) / quiz.length) * 100;
-document.getElementById("progressBar").style.width = progress + "%";
-}
+    setTimeout(function() {
+        q++;
 
-function finish(){
-document.getElementById("quiz").classList.add("hidden");
-document.getElementById("result").classList.remove("hidden");
-
-document.getElementById("result").innerText =
-`🔥 Your Score: ${score} / 5`;
+        if (q < quiz.length) {
+            showQuestion();
+        } else {
+            finishQuiz();
+        }
+    }, 900);
 }
 
+function showFeedback(correct) {
+    let feedback = document.getElementById("feedback");
+
+    feedback.classList.remove("hidden", "correct", "wrong");
+
+    if (correct) {
+        feedback.innerText = "Correct ✅";
+        feedback.classList.add("correct");
+    } else {
+        feedback.innerText = "Wrong ❌";
+        feedback.classList.add("wrong");
+    }
+}
+
+function updateProgress() {
+    let progress = ((q) / quiz.length) * 100;
+    document.getElementById("progressBar").style.width = progress + "%";
+}
+
+function finishQuiz() {
+    document.getElementById("quiz").classList.add("hidden");
+    document.getElementById("result").classList.remove("hidden");
+
+    document.getElementById("result").innerHTML =
+        `<h1>Quiz Completed 🎉</h1>
+         <p>Your Score: ${score} / ${quiz.length}</p>
+         <button onclick="location.reload()">Try Again</button>`;
+}
 </script>
 
 </body>
