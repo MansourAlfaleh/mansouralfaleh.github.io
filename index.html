@@ -1,178 +1,373 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Mansour Linguistics Website</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mansour Applied Computing in Linguistics</title>
 
 <style>
-body {
-  font-family: Arial;
-  background: linear-gradient(135deg,#0f172a,#1d4ed8);
-  color: white;
-  text-align: center;
-  margin: 0;
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#0f172a,#1d4ed8);
+  color:white;
+  text-align:center;
 }
 
-nav {
-  background: rgba(0,0,0,0.3);
-  padding: 15px;
+nav{
+  background:rgba(0,0,0,0.35);
+  padding:15px;
+  position:sticky;
+  top:0;
 }
 
-nav button {
-  margin: 5px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  background: #6366f1;
-  color: white;
+nav button{
+  padding:10px 18px;
+  margin:5px;
+  border:none;
+  border-radius:20px;
+  background:#6366f1;
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-.section {
-  display: none;
-  padding: 40px;
+.section{
+  display:none;
+  max-width:900px;
+  margin:40px auto;
+  padding:30px;
 }
 
-.active {
-  display: block;
+.active{display:block;}
+
+.card{
+  background:rgba(255,255,255,0.09);
+  padding:25px;
+  border-radius:20px;
+  margin:20px auto;
 }
 
-.answer-btn {
-  display: block;
-  margin: 10px auto;
-  padding: 10px;
-  width: 200px;
-  background: #312e81;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
+h1{font-size:42px;}
+h2{color:#e0e7ff;}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:rgba(255,255,255,0.08);
 }
 
-.selected {
-  background: yellow;
-  color: black;
+td,th{
+  padding:12px;
+  border:1px solid rgba(255,255,255,0.2);
+}
+
+button.main{
+  background:linear-gradient(90deg,#6366f1,#a855f7);
+  padding:14px 28px;
+  border-radius:25px;
+  border:none;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.answer-btn{
+  display:block;
+  width:70%;
+  margin:10px auto;
+  padding:12px;
+  border-radius:12px;
+  border:2px solid #a855f7;
+  background:#312e81;
+  color:white;
+  cursor:pointer;
+}
+
+.selected{
+  background:#facc15 !important;
+  color:black !important;
+}
+
+input, textarea, select{
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  width:60%;
+  margin:10px;
+  text-align:center;
+}
+
+.review{
+  text-align:left;
+  background:rgba(255,255,255,0.1);
+  padding:15px;
+  margin:12px auto;
+  border-radius:12px;
 }
 </style>
-
 </head>
+
 <body>
 
 <nav>
   <button onclick="show('about')">About</button>
   <button onclick="show('syllabus')">Syllabus</button>
-  <button onclick="show('lesson')">Lesson</button>
+  <button onclick="show('lessons')">Lessons</button>
   <button onclick="show('quiz')">Quiz</button>
 </nav>
 
-<!-- ABOUT -->
-<div id="about" class="section active">
-<h1>About</h1>
-<p>
-Hi, I'm Mansour 👋.  
-This website is about **English linguistics**, focusing on grammar and language usage.
-</p>
-</div>
+<section id="about" class="section active">
+  <h1>Applied Computing in Linguistics</h1>
+  <p>Linguistics · Computing · Language Technology</p>
 
-<!-- SYLLABUS -->
-<div id="syllabus" class="section">
-<h1>Syllabus</h1>
-<ul>
-<li>Sentence structure</li>
-<li>Verb tenses</li>
-<li>Basic grammar rules</li>
-<li>Vocabulary usage</li>
-</ul>
-</div>
+  <div class="card">
+    <h2>About Me</h2>
+    <p>
+      Hi, I'm Mansour. This website is for my Computer Applications in Linguistics project.
+      It shows how technology can be used to teach and practice English language skills.
+    </p>
+  </div>
 
-<!-- LESSON -->
-<div id="lesson" class="section">
-<h1>Lesson</h1>
-<p>
-A sentence must start with a capital letter and include a subject and a verb.
-</p>
+  <div class="card">
+    <h2>What is this course?</h2>
+    <p>
+      This course connects language with technology. It introduces tools used in language learning,
+      corpus linguistics, computer-assisted language learning, and basic text processing.
+    </p>
+  </div>
+</section>
 
-<p>
-Example:  
-She writes every day.
-</p>
-</div>
+<section id="syllabus" class="section">
+  <h1>Syllabus</h1>
+  <p>A simple course plan for Applied Computing in Linguistics.</p>
 
-<!-- QUIZ -->
-<div id="quiz" class="section">
+  <table>
+    <tr><th>Week</th><th>Topic</th><th>Activity</th></tr>
+    <tr><td>1</td><td>Introduction to Language Technology</td><td>Discussion</td></tr>
+    <tr><td>2</td><td>CALL and MALL</td><td>Examples</td></tr>
+    <tr><td>3</td><td>Text Processing</td><td>Tokenization Practice</td></tr>
+    <tr><td>4</td><td>Grammar and Parsing</td><td>Short Tasks</td></tr>
+    <tr><td>5</td><td>Corpus Linguistics</td><td>AntConc Practice</td></tr>
+    <tr><td>6</td><td>Online Language Exercises</td><td>Project Work</td></tr>
+  </table>
+</section>
 
-<h2>Enter your name</h2>
-<input id="name" placeholder="Your name">
-<br><br>
-<button onclick="start()">Start Quiz</button>
+<section id="lessons" class="section">
+  <h1>Lessons</h1>
 
-<div id="quizArea" style="display:none;">
-<h3 id="q"></h3>
-<div id="answers"></div>
-<button onclick="next()">Next</button>
-</div>
+  <div class="card">
+    <h2>Lesson 1: Tokenization</h2>
+    <p>Tokenization means breaking a text into smaller parts, usually words or tokens.</p>
+  </div>
 
-<div id="result"></div>
+  <div class="card">
+    <h2>Lesson 2: Lemmatization</h2>
+    <p>Lemmatization reduces words to their base form. For example: is, are, am → be.</p>
+  </div>
 
-</div>
+  <div class="card">
+    <h2>Lesson 3: Corpus Linguistics</h2>
+    <p>A corpus is a collection of electronic texts used to study real language use.</p>
+  </div>
+</section>
+
+<section id="quiz" class="section">
+  <h1>Linguistics Quiz</h1>
+  <p>Enter your name and answer 5 different types of questions.</p>
+
+  <div id="startBox">
+    <input id="studentName" placeholder="Enter your name">
+    <br>
+    <button class="main" onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <div id="quizBox" style="display:none;">
+    <h2 id="welcome"></h2>
+    <h3 id="qNumber"></h3>
+    <p id="question"></p>
+
+    <div id="answers"></div>
+
+    <input id="textAnswer" style="display:none;" placeholder="Type your answer">
+
+    <select id="selectAnswer" style="display:none;">
+      <option value="">Choose answer</option>
+    </select>
+
+    <br>
+    <button class="main" onclick="nextQuestion()">Next</button>
+  </div>
+
+  <div id="result"></div>
+</section>
 
 <script>
-
 function show(id){
   document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-let i=0;
-let score=0;
-let selected="";
-let name="";
+let index = 0;
+let score = 0;
+let selected = "";
+let student = "";
+let review = [];
 
-let quiz=[
-{q:"Each of the students ___ expected",a:["are","is","were"],c:"is"},
-{q:"Sentence must start with capital?",a:["True","False"],c:"True"},
-{q:"I ___ a student",a:["am","is","are"],c:"am"}
+const quiz = [
+  {
+    type:"mcq",
+    q:"What is a corpus?",
+    a:["A grammar rule","A collection of electronic texts","A translation tool"],
+    correct:"A collection of electronic texts"
+  },
+  {
+    type:"truefalse",
+    q:"True or False: KWIC means Key Word In Context.",
+    a:["True","False"],
+    correct:"True"
+  },
+  {
+    type:"fill",
+    q:"Fill in the blank: Tokenization means breaking text into ______.",
+    correct:"tokens"
+  },
+  {
+    type:"dropdown",
+    q:"Choose the correct base form of: is, are, am",
+    a:["go","be","have"],
+    correct:"be"
+  },
+  {
+    type:"short",
+    q:"Short answer: What tool did we use for corpus analysis?",
+    correct:"AntConc"
+  }
 ];
 
-function start(){
-name=document.getElementById("name").value;
-if(name=="") return alert("enter name");
+function startQuiz(){
+  student = document.getElementById("studentName").value.trim();
 
-document.getElementById("quizArea").style.display="block";
-showQ();
+  if(student === ""){
+    alert("Please enter your name");
+    return;
+  }
+
+  document.getElementById("startBox").style.display = "none";
+  document.getElementById("quizBox").style.display = "block";
+  document.getElementById("welcome").innerText = "Welcome, " + student + " 👋";
+
+  showQuestion();
 }
 
-function showQ(){
-let cur=quiz[i];
-document.getElementById("q").innerText=cur.q;
-document.getElementById("answers").innerHTML="";
-selected="";
+function showQuestion(){
+  let current = quiz[index];
 
-cur.a.forEach(a=>{
-document.getElementById("answers").innerHTML+=
-`<div class="answer-btn" onclick="pick(this,'${a}')">${a}</div>`;
-});
+  document.getElementById("qNumber").innerText = "Question " + (index+1) + " / " + quiz.length;
+  document.getElementById("question").innerText = current.q;
+
+  document.getElementById("answers").innerHTML = "";
+  document.getElementById("textAnswer").style.display = "none";
+  document.getElementById("textAnswer").value = "";
+  document.getElementById("selectAnswer").style.display = "none";
+  document.getElementById("selectAnswer").innerHTML = '<option value="">Choose answer</option>';
+
+  selected = "";
+
+  if(current.type === "mcq" || current.type === "truefalse"){
+    current.a.forEach(ans=>{
+      document.getElementById("answers").innerHTML +=
+      `<button class="answer-btn" onclick="pick(this,'${ans}')">${ans}</button>`;
+    });
+  }
+
+  if(current.type === "fill" || current.type === "short"){
+    document.getElementById("textAnswer").style.display = "inline-block";
+  }
+
+  if(current.type === "dropdown"){
+    let select = document.getElementById("selectAnswer");
+    current.a.forEach(ans=>{
+      select.innerHTML += `<option value="${ans}">${ans}</option>`;
+    });
+    select.style.display = "inline-block";
+  }
 }
 
-function pick(el,a){
-selected=a;
-document.querySelectorAll(".answer-btn").forEach(b=>b.classList.remove("selected"));
-el.classList.add("selected");
+function pick(btn, ans){
+  selected = ans;
+  document.querySelectorAll(".answer-btn").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
 }
 
-function next(){
-if(selected=="") return alert("choose");
+function nextQuestion(){
+  let current = quiz[index];
+  let answer = "";
 
-if(selected==quiz[i].c) score++;
+  if(current.type === "mcq" || current.type === "truefalse"){
+    if(selected === ""){
+      alert("Choose an answer");
+      return;
+    }
+    answer = selected;
+  }
 
-i++;
+  if(current.type === "fill" || current.type === "short"){
+    answer = document.getElementById("textAnswer").value.trim();
+    if(answer === ""){
+      alert("Type your answer");
+      return;
+    }
+  }
 
-if(i<quiz.length){
-showQ();
-}else{
-document.getElementById("result").innerHTML=
-`<h2>${name} Score: ${score}/${quiz.length}</h2>`;
+  if(current.type === "dropdown"){
+    answer = document.getElementById("selectAnswer").value;
+    if(answer === ""){
+      alert("Choose an answer");
+      return;
+    }
+  }
+
+  let correct = answer.toLowerCase() === current.correct.toLowerCase();
+  if(correct) score++;
+
+  review.push({
+    question: current.q,
+    your: answer,
+    correct: current.correct,
+    result: correct
+  });
+
+  index++;
+
+  if(index < quiz.length){
+    showQuestion();
+  } else {
+    finishQuiz();
+  }
 }
-}
 
+function finishQuiz(){
+  document.getElementById("quizBox").style.display = "none";
+
+  let html = `<h2>Quiz Completed 🎉</h2>
+              <h3>${student}, your score is ${score}/${quiz.length}</h3>
+              <h2>Review Your Answers</h2>`;
+
+  review.forEach((r,i)=>{
+    html += `
+    <div class="review">
+      <b>Question ${i+1}:</b> ${r.question}<br>
+      Your answer: ${r.your}<br>
+      Correct answer: ${r.correct}<br>
+      Result: ${r.result ? "Correct ✅" : "Wrong ❌"}
+    </div>`;
+  });
+
+  html += `<button class="main" onclick="location.reload()">Try Again</button>`;
+
+  document.getElementById("result").innerHTML = html;
+}
 </script>
 
 </body>
