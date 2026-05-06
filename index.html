@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Mansour Quiz</title>
+<title>Mansour Linguistics Website</title>
+
 <style>
 body {
   font-family: Arial;
@@ -11,219 +12,167 @@ body {
   margin: 0;
 }
 
-.container {
-  max-width: 850px;
-  margin: 70px auto;
-  padding: 30px;
-}
-
-h1 { font-size: 42px; }
-
-.about {
-  max-width: 650px;
-  margin: 25px auto;
-  padding: 20px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 18px;
-}
-
-button {
-  padding: 15px 30px;
-  margin: 12px;
-  border-radius: 25px;
-  border: none;
-  cursor: pointer;
-  background: linear-gradient(90deg,#6366f1,#a855f7);
-  color: white;
-  font-weight: bold;
-}
-
-input {
+nav {
+  background: rgba(0,0,0,0.3);
   padding: 15px;
-  width: 60%;
-  border-radius: 12px;
-  border: none;
-  text-align: center;
-  font-size: 16px;
 }
 
-.hidden { display: none; }
+nav button {
+  margin: 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  background: #6366f1;
+  color: white;
+}
+
+.section {
+  display: none;
+  padding: 40px;
+}
+
+.active {
+  display: block;
+}
 
 .answer-btn {
   display: block;
-  width: 70%;
-  margin: 12px auto;
+  margin: 10px auto;
+  padding: 10px;
+  width: 200px;
   background: #312e81;
   color: white;
-  border: 2px solid #a855f7;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .selected {
-  background: #facc15 !important;
-  color: black !important;
-}
-
-.review {
-  background: rgba(255,255,255,0.1);
-  padding: 12px;
-  margin: 12px auto;
-  border-radius: 12px;
-  max-width: 700px;
+  background: yellow;
+  color: black;
 }
 </style>
+
 </head>
-
 <body>
-<div class="container">
 
-<div id="home">
-  <h1>Master English Grammar 🚀</h1>
-  <p>Test your knowledge with a smart quiz</p>
+<nav>
+  <button onclick="show('about')">About</button>
+  <button onclick="show('syllabus')">Syllabus</button>
+  <button onclick="show('lesson')">Lesson</button>
+  <button onclick="show('quiz')">Quiz</button>
+</nav>
 
-  <div class="about">
-    <h2>About Me</h2>
-    <p>
-      Hi, I'm Mansour 👋. This is my personal English quiz website where I test grammar skills in a simple and interactive way.
-    </p>
-  </div>
-
-  <button onclick="showName()">Start Quiz</button>
+<!-- ABOUT -->
+<div id="about" class="section active">
+<h1>About</h1>
+<p>
+Hi, I'm Mansour 👋.  
+This website is about **English linguistics**, focusing on grammar and language usage.
+</p>
 </div>
 
-<div id="namePage" class="hidden">
-  <h1>Before We Start</h1>
-  <p>Please enter your name to begin the quiz.</p>
-  <input id="name" placeholder="Enter your name">
-  <br>
-  <button onclick="startQuiz()">Begin</button>
+<!-- SYLLABUS -->
+<div id="syllabus" class="section">
+<h1>Syllabus</h1>
+<ul>
+<li>Sentence structure</li>
+<li>Verb tenses</li>
+<li>Basic grammar rules</li>
+<li>Vocabulary usage</li>
+</ul>
 </div>
 
-<div id="quiz" class="hidden">
-  <h2 id="welcome"></h2>
-  <h3 id="number"></h3>
-  <p id="question"></p>
+<!-- LESSON -->
+<div id="lesson" class="section">
+<h1>Lesson</h1>
+<p>
+A sentence must start with a capital letter and include a subject and a verb.
+</p>
 
-  <div id="answers"></div>
-  <input id="textAnswer" class="hidden" placeholder="Type your answer">
-
-  <br>
-  <button onclick="next()">Next</button>
+<p>
+Example:  
+She writes every day.
+</p>
 </div>
 
-<div id="result" class="hidden"></div>
+<!-- QUIZ -->
+<div id="quiz" class="section">
+
+<h2>Enter your name</h2>
+<input id="name" placeholder="Your name">
+<br><br>
+<button onclick="start()">Start Quiz</button>
+
+<div id="quizArea" style="display:none;">
+<h3 id="q"></h3>
+<div id="answers"></div>
+<button onclick="next()">Next</button>
+</div>
+
+<div id="result"></div>
 
 </div>
 
 <script>
-let i = 0;
-let score = 0;
-let selected = "";
-let userName = "";
-let review = [];
 
-const quiz = [
-  {type:"mcq", q:"Each of the students ___ expected to submit their assignment by Friday.", a:["are","is","were"], correct:"is"},
-  {type:"tf", q:"True or False: A sentence must always start with a capital letter.", a:["True","False"], correct:"True"},
-  {type:"fill", q:"Fill in the blank: I ___ a student.", correct:"am"},
-  {type:"short", q:"What is the past tense of 'go'?", correct:"went"},
-  {type:"short", q:"Write the synonym of 'big'.", correct:"large"}
+function show(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+let i=0;
+let score=0;
+let selected="";
+let name="";
+
+let quiz=[
+{q:"Each of the students ___ expected",a:["are","is","were"],c:"is"},
+{q:"Sentence must start with capital?",a:["True","False"],c:"True"},
+{q:"I ___ a student",a:["am","is","are"],c:"am"}
 ];
 
-function showName(){
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("namePage").classList.remove("hidden");
+function start(){
+name=document.getElementById("name").value;
+if(name=="") return alert("enter name");
+
+document.getElementById("quizArea").style.display="block";
+showQ();
 }
 
-function startQuiz(){
-  userName = document.getElementById("name").value.trim();
-  if(userName === "") return alert("Please enter your name");
+function showQ(){
+let cur=quiz[i];
+document.getElementById("q").innerText=cur.q;
+document.getElementById("answers").innerHTML="";
+selected="";
 
-  document.getElementById("namePage").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-  document.getElementById("welcome").innerText = "Welcome, " + userName + " 👋";
-
-  showQuestion();
+cur.a.forEach(a=>{
+document.getElementById("answers").innerHTML+=
+`<div class="answer-btn" onclick="pick(this,'${a}')">${a}</div>`;
+});
 }
 
-function showQuestion(){
-  let current = quiz[i];
-
-  document.getElementById("number").innerText = "Question " + (i+1) + " / " + quiz.length;
-  document.getElementById("question").innerText = current.q;
-  document.getElementById("answers").innerHTML = "";
-  document.getElementById("textAnswer").classList.add("hidden");
-  document.getElementById("textAnswer").value = "";
-  selected = "";
-
-  if(current.type === "mcq" || current.type === "tf"){
-    current.a.forEach(ans => {
-      document.getElementById("answers").innerHTML +=
-      `<button class="answer-btn" onclick="pick(this,'${ans}')">${ans}</button>`;
-    });
-  } else {
-    document.getElementById("textAnswer").classList.remove("hidden");
-  }
-}
-
-function pick(btn, ans){
-  selected = ans;
-  document.querySelectorAll(".answer-btn").forEach(b => b.classList.remove("selected"));
-  btn.classList.add("selected");
+function pick(el,a){
+selected=a;
+document.querySelectorAll(".answer-btn").forEach(b=>b.classList.remove("selected"));
+el.classList.add("selected");
 }
 
 function next(){
-  let current = quiz[i];
-  let answer = "";
+if(selected=="") return alert("choose");
 
-  if(current.type === "fill" || current.type === "short"){
-    answer = document.getElementById("textAnswer").value.toLowerCase().trim();
-    if(answer === "") return alert("Answer first");
-  } else {
-    if(selected === "") return alert("Choose an answer");
-    answer = selected;
-  }
+if(selected==quiz[i].c) score++;
 
-  let correct = answer.toLowerCase() === current.correct.toLowerCase();
-  if(correct) score++;
+i++;
 
-  review.push({
-    question: current.q,
-    your: answer,
-    correct: current.correct,
-    result: correct
-  });
-
-  i++;
-
-  if(i < quiz.length){
-    showQuestion();
-  } else {
-    finish();
-  }
+if(i<quiz.length){
+showQ();
+}else{
+document.getElementById("result").innerHTML=
+`<h2>${name} Score: ${score}/${quiz.length}</h2>`;
+}
 }
 
-function finish(){
-  document.getElementById("quiz").classList.add("hidden");
-  document.getElementById("result").classList.remove("hidden");
-
-  let html = `<h1>Quiz Completed 🎉</h1>
-              <h2>${userName}</h2>
-              <p>Your Score: ${score} / ${quiz.length}</p>
-              <h2>Review Your Answers</h2>`;
-
-  review.forEach((r, index) => {
-    html += `
-    <div class="review">
-      <b>Q${index+1}:</b> ${r.question}<br>
-      Your answer: ${r.your}<br>
-      Correct answer: ${r.correct}<br>
-      Result: ${r.result ? "Correct ✅" : "Wrong ❌"}
-    </div>`;
-  });
-
-  html += `<button onclick="location.reload()">Try Again</button>`;
-  document.getElementById("result").innerHTML = html;
-}
 </script>
 
 </body>
